@@ -1,40 +1,41 @@
 package com.example.miniblog.service;
 
+import com.example.miniblog.dto.CreatePostRequest;
+import com.example.miniblog.dto.PostDto;
 import com.example.miniblog.model.Post;
 import com.example.miniblog.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
 
-    @Autowired
-    private PostRepository repo;
+    private final PostRepository postRepository;
 
-    @Override
-    public Page<Post> listAll(String q, Long categoryId, Long tagId, Pageable pageable) {
-        if (categoryId != null)      return repo.findAllByCategories_Id(categoryId, pageable);
-        else if (tagId != null)      return repo.findAllByTags_Id(tagId, pageable);
-        else if (q != null && !q.isBlank()) return repo.findAllByTitleContainingIgnoreCase(q, pageable);
-        else                         return repo.findAll(pageable);
+    public PostServiceImpl(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
     @Override
-    public Optional<Post> getById(Long id) {
-        return repo.findById(id);
+    public List<PostDto> getAllPosts() {
+        return postRepository.findAll().stream()
+                .map(p -> new PostDto(
+                        p.getId(),
+                        p.getTitle(),
+                        p.getContent(),
+                        p.getAuthorUsername(),
+                        p.getCreatedAt()
+                )).collect(Collectors.toList());
     }
-
     @Override
-    public Post save(Post post) {
-        return repo.save(post);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repo.deleteById(id);
+    public Post createPost(CreatePostRequest request) {
+        Post post = new Post();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        post.setAuthorUsername(request.getAuthorUsername());
+        post.setCreatedAt(java.time.LocalDateTime.now());
+        return postRepository.save(post);
     }
 }
