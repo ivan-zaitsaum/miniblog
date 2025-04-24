@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Blog – Posts</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+    <script th:src="@{/js/theme.js}" defer></script>
+</head>
+<body>
+<!-- навигация -->
+<div class="nav">
+    <a th:href="@{/posts}">Home</a>
+    <a th:href="@{/posts/new}">Add Post</a>
+</div>
+<h1>Mini Blog</h1>
+<hr>
+
+<form th:action="@{/posts}" method="get" class="search-bar">
+    <input type="text" name="q" placeholder="Search..."
+           th:value="${searchQuery}">
+    <select name="category">
+        <option value="">All Categories</option>
+        <option th:each="c : ${categories}"
+                th:value="${c.id}"
+                th:text="${c.name}"
+                th:selected="${c.id == selectedCategory}"></option>
+    </select>
+    <select name="tag">
+        <option value="">All Tags</option>
+        <option th:each="t : ${tags}"
+                th:value="${t.id}"
+                th:text="${t.name}"
+                th:selected="${t.id == selectedTag}"></option>
+    </select>
+    <button type="submit">Filter</button>
+    <a th:href="@{/posts}">All Posts</a>
+</form>
+
+<div th:if="${posts.content}">
+    <div th:each="post : ${posts.content}" class="post">
+        <h2><a th:href="@{/posts/{id}(id=${post.id})}"
+               th:text="${post.title}">Title</a></h2>
+        <p th:text="${post.content}">Content…</p>
+        <p class="meta">
+            Created: <span th:text="${post.createdAt}"></span>
+        </p>
+        <p th:if="${post.categories}">
+            Categories:
+            <span th:each="c : ${post.categories}" class="label"
+                  th:text="${c.name}">Cat</span>
+        </p>
+        <p th:if="${post.tags}">
+            Tags:
+            <span th:each="t : ${post.tags}" class="label"
+                  th:text="${t.name}">Tag</span>
+        </p>
+        <p>
+            <a th:href="@{/posts/edit/{id}(id=${post.id})}">Edit</a> |
+            <a th:href="@{/posts/delete/{id}(id=${post.id})}"
+               onclick="return confirm('Delete?')">Delete</a>
+        </p>
+    </div>
+</div>
+<div th:if="${#lists.isEmpty(posts.content)}">
+    <p>No posts found.</p>
+</div>
+
+<!-- пагинация -->
+<div class="pagination" th:if="${totalPages > 1}">
+    <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+       th:href="@{/posts(page=${i}, q=${searchQuery}, category=${selectedCategory}, tag=${selectedTag})}"
+       th:text="${i}"
+       th:classappend="${i == currentPage} ? ' active' : ''">1</a>
+</div>
+</body>
+</html>

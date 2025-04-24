@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <!-- 1) Общий CSS для тем -->
+    <link rel="stylesheet" th:href="@{/css/theme.css}" />
+
+    <!-- 2) Локальные стили формы логина -->
+    <style>
+        .login-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            margin: 50px auto;
+        }
+        .login-container h1 {
+            text-align: center;
+            color: var(--link-color);
+            margin-bottom: 20px;
+        }
+        .login-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--link-color);
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--link-color);
+            border-radius: 5px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+        .login-container input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            background-color: var(--link-color);
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            color: var(--bg-color);
+            cursor: pointer;
+        }
+        .login-container p {
+            text-align: center;
+        }
+        .nav {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .nav a {
+            text-decoration: none;
+            color: var(--link-color);
+            margin: 0 10px;
+        }
+        #theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: var(--link-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
+
+    <!-- 3) Скрипт переключения темы -->
+    <script th:src="@{/js/theme.js}" defer></script>
+</head>
+<body>
+
+<!-- 4) Кнопка-переключатель темы -->
+<button id="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+
+<!-- Навигация -->
+<div class="nav">
+    <a th:href="@{/posts}">Main</a> |
+    <a th:href="@{/register}">Registration</a>
+</div>
+
+<!-- Форма логина -->
+<div class="login-container">
+    <h1>Login</h1>
+
+    <!-- Ошибка аутентификации -->
+    <p th:if="${param.error}" style="color:red;">
+        Invalid username or password.
+    </p>
+    <!-- Сообщение после logout -->
+    <p th:if="${param.logout}" style="color:green;">
+        You have been logged out.
+    </p>
+
+    <form th:action="@{/login}" method="post">
+        <label for="username">User name:</label>
+        <input type="text" id="username" name="username" required />
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+
+        <input type="submit" value="Login" />
+    </form>
+
+    <p>No account?
+        <a th:href="@{/register}">Registration</a>
+    </p>
+</div>
+</body>
+</html>

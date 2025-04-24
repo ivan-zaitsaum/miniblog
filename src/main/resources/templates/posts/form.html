@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create/Edit Post</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+</head>
+<body>
+<a th:href="@{/posts}">← Back to list</a>
+<h1 th:text="${post.id} != null ? 'Edit Post' : 'New Post'">Form</h1>
+
+<form
+        th:action="${post.id} != null ? @{/posts/edit/{id}(id=${post.id})} : @{/posts}"
+        method="post">
+    <input type="text" name="title" placeholder="Title"
+           th:value="${post.title}"/><br>
+
+    <textarea name="content" rows="5" placeholder="Content…"
+              th:text="${post.content}"></textarea><br>
+
+    <label>Categories:</label><br>
+    <div th:each="c : ${categories}">
+        <input type="checkbox" name="categoryIds"
+               th:value="${c.id}"
+               th:checked="${post.categories.contains(c)}"/>
+        <span th:text="${c.name}">Cat</span><br>
+    </div>
+
+    <label>Tags:</label><br>
+    <div th:each="t : ${tags}">
+        <input type="checkbox" name="tagIds"
+               th:value="${t.id}"
+               th:checked="${post.tags.contains(t)}"/>
+        <span th:text="${t.name}">Tag</span><br>
+    </div>
+
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>
