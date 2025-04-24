@@ -30,13 +30,10 @@ public class AuthService {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
-        }
-        if (userRepository.findAll().stream().anyMatch(u -> u.getEmail().equalsIgnoreCase(request.getEmail()))) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
-
 
         User user = new User(
                 request.getUsername(),
@@ -44,11 +41,13 @@ public class AuthService {
                 passwordEncoder.encode(request.getPassword()),
                 Role.USER
         );
+
         userRepository.save(user);
 
         String token = jwtService.generateToken(user);
         return new AuthResponse(token);
     }
+
 
     public AuthResponse login(LoginRequest request) {
         Optional<User> userOpt = userRepository.findByUsername(request.getUsername());

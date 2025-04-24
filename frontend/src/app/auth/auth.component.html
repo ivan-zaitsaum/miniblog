@@ -9,4 +9,10 @@
   <input type="password" name="password" placeholder="Password" [(ngModel)]="form.password" required>
 
   <button type="submit">{{ isLoginMode ? 'Sign In' : 'Register' }}</button>
+  <p>
+    <a (click)="toggleMode()" style="cursor:pointer; color:blue; text-decoration:underline;">
+      {{ isLoginMode ? 'Don\'t have an account? Register' : 'Already have an account? Sign in' }}
+    </a>
+  </p>
+
 </form>
