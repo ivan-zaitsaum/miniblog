@@ -1,8 +1,8 @@
 package com.example.miniblog.config;
 
+import com.example.miniblog.model.User;
 import com.example.miniblog.repository.UserRepository;
 import com.example.miniblog.service.JwtService;
-import com.example.miniblog.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,8 +34,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getServletPath();
-        if (path.startsWith("/api/auth")) {
-            filterChain.doFilter(request, response); // ← пропускаем регистрацию и логин
+        String method = request.getMethod();
+
+        // ✅ ПУБЛИЧНЫЕ маршруты — пропускаем:
+        if (
+                path.startsWith("/api/auth") ||
+                        (method.equals("GET") && path.startsWith("/api/posts")) ||
+                        method.equals("OPTIONS")
+        ) {
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -46,7 +53,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String token = authHeader.substring(7);
-        final String username = jwtService.extractUsername(token);
+        String username = null;
+
+        try {
+            username = jwtService.extractUsername(token);
+        } catch (Exception e) {
+            // логируем, но продолжаем фильтрацию
+            System.out.println("⚠️ Invalid token: " + e.getMessage());
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             Optional<User> userOpt = userRepository.findByUsername(username);

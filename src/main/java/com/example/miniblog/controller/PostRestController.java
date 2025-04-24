@@ -1,10 +1,11 @@
 package com.example.miniblog.controller;
 
+import com.example.miniblog.dto.CreatePostRequest;
 import com.example.miniblog.dto.PostDto;
 import com.example.miniblog.service.PostService;
-import org.springframework.web.bind.annotation.*;
-import com.example.miniblog.dto.CreatePostRequest;
 import com.example.miniblog.model.Post;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class PostRestController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody CreatePostRequest request) {
+        // Присваиваем авторизацию пользователю перед созданием поста
         Post created = postService.createPost(request);
         return ResponseEntity.ok(created);
     }

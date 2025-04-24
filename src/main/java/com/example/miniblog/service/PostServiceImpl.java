@@ -3,7 +3,9 @@ package com.example.miniblog.service;
 import com.example.miniblog.dto.CreatePostRequest;
 import com.example.miniblog.dto.PostDto;
 import com.example.miniblog.model.Post;
+import com.example.miniblog.model.User;
 import com.example.miniblog.repository.PostRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,16 +27,23 @@ public class PostServiceImpl implements PostService {
                         p.getId(),
                         p.getTitle(),
                         p.getContent(),
-                        p.getAuthorUsername(),
+                        p.getAuthorUsername(),  // Используем новый метод
                         p.getCreatedAt()
                 )).collect(Collectors.toList());
     }
+
     @Override
     public Post createPost(CreatePostRequest request) {
         Post post = new Post();
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
-        post.setAuthorUsername(request.getAuthorUsername());
+
+        // Извлекаем пользователя из SecurityContextHolder
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Присваиваем пользователя посту
+        post.setAuthor(user);
+
         post.setCreatedAt(java.time.LocalDateTime.now());
         return postRepository.save(post);
     }

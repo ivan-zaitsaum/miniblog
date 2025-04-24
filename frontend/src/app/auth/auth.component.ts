@@ -1,8 +1,9 @@
+// src/app/auth/auth.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../services/auth.service';
+import { FormsModule } from '@angular/forms';
+import {AuthService} from '../services/auth.service';  // Импортируем AuthService
 
 @Component({
   selector: 'app-auth',
@@ -21,7 +22,7 @@ export class AuthComponent {
   };
 
   constructor(
-    private authService: AuthService,
+    private authService: AuthService,  // Теперь доступен AuthService
     private router: Router
   ) {}
 
@@ -31,24 +32,29 @@ export class AuthComponent {
 
   submit(): void {
     if (this.isLoginMode) {
-      this.authService.login(this.form).subscribe({
+      // Вход
+      this.authService.login({
+        username: this.form.username,
+        password: this.form.password
+      }).subscribe({
         next: () => {
           alert('Login successful!');
-          location.href = '/';
+          window.location.href = '/';  // Редирект на главную после логина
         },
         error: err => {
-          alert(err.error?.message || 'Login failed. Please try again.');
+          alert(err.error?.message || 'Login failed.');
         }
       });
     } else {
+      // Регистрация
       this.authService.register(this.form).subscribe({
         next: () => {
           alert('Registration successful! Please log in.');
-          this.isLoginMode = true;
-          this.form.password = ''; // clear password field
+          this.isLoginMode = true;  // Переключаем на форму логина
+          this.form.password = '';  // Очищаем поле пароля
         },
         error: err => {
-          alert(err.error?.message || 'Registration failed. Please try again.');
+          alert(err.error?.message || 'Registration failed.');
         }
       });
     }

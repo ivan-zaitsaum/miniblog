@@ -13,7 +13,9 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private String authorUsername;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User author;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -27,8 +29,12 @@ public class Post {
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
-    public String getAuthorUsername() { return authorUsername; }
-    public void setAuthorUsername(String authorUsername) { this.authorUsername = authorUsername; }
+    public User getAuthor() { return author; }
+    public void setAuthor(User author) { this.author = author; }
+
+    public String getAuthorUsername() {
+        return author != null ? author.getUsername() : "Unknown"; // возвращаем имя пользователя
+    }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

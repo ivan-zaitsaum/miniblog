@@ -1,17 +1,16 @@
 <h2>MiniBlog</h2>
 
-<form (ngSubmit)="addPost()" #postForm="ngForm">
-  <input type="text" placeholder="Title" [(ngModel)]="newPost.title" name="title" required>
-  <input type="text" placeholder="Author" [(ngModel)]="newPost.authorUsername" name="author" required>
-  <textarea placeholder="Content" [(ngModel)]="newPost.content" name="content" required></textarea>
+<form *ngIf="authService.isLoggedIn()" (ngSubmit)="addPost()">
+  <input type="text" [(ngModel)]="newPost.title" name="title" placeholder="Title" required />
+  <textarea [(ngModel)]="newPost.content" name="content" placeholder="Content" required></textarea>
   <button type="submit">Add Post</button>
 </form>
 
-<hr>
+<hr />
 
 <div *ngFor="let post of posts">
   <h3>{{ post.title }}</h3>
   <p>{{ post.content }}</p>
-  <small>By {{ post.authorUsername }} on {{ post.createdAt | date:'short' }}</small>
-  <hr>
+  <small>By {{ post.authorUsername }} on {{ post.createdAt | date: 'short' }}</small>
+  <hr />
 </div>
