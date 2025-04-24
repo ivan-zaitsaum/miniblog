@@ -1,0 +1,12 @@
+<h2>{{ isLoginMode ? 'Sign In' : 'Register' }}</h2>
+
+<form (ngSubmit)="submit()" #authForm="ngForm">
+  <input type="text" name="username" placeholder="Username" [(ngModel)]="form.username" required>
+
+  <input *ngIf="!isLoginMode" type="email" name="email" placeholder="Email"
+         [(ngModel)]="form.email" required>
+
+  <input type="password" name="password" placeholder="Password" [(ngModel)]="form.password" required>
+
+  <button type="submit">{{ isLoginMode ? 'Sign In' : 'Register' }}</button>
+</form>
