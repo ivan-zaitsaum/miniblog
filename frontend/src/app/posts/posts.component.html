@@ -1,10 +1,6 @@
 <h2>MiniBlog</h2>
 
-<form *ngIf="authService.isLoggedIn()" (ngSubmit)="addPost()">
-  <input type="text" [(ngModel)]="newPost.title" name="title" placeholder="Title" required />
-  <textarea [(ngModel)]="newPost.content" name="content" placeholder="Content" required></textarea>
-  <button type="submit">Add Post</button>
-</form>
+<a routerLink="/add-post" *ngIf="authService.isLoggedIn()">Add Post</a>
 
 <hr />
 
@@ -12,5 +8,12 @@
   <h3>{{ post.title }}</h3>
   <p>{{ post.content }}</p>
   <small>By {{ post.authorUsername }} on {{ post.createdAt | date: 'short' }}</small>
+
+  <!-- Кнопка удаления только для автора -->
+  <button *ngIf="authService.getUsername() === post.authorUsername && post.id !== undefined"
+          (click)="deletePost(post.id!)">
+    Delete
+  </button>
+
   <hr />
 </div>

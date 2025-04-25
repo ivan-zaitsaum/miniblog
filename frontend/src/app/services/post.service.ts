@@ -1,4 +1,3 @@
-// src/app/posts/post.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -22,9 +21,15 @@ export class PostService {
   }
 
   create(post: Post): Observable<Post> {
-    const token = localStorage.getItem('auth_token');  // Получаем токен
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};  // Добавляем токен в заголовок
+    const token = localStorage.getItem('auth_token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+    return this.http.post<Post>(this.API, post, { headers });
+  }
 
-    return this.http.post<Post>(this.API, post, { headers });  // Отправляем с заголовками
+  // 🔥 Новый метод для удаления поста
+  deletePost(id: number): Observable<void> {
+    const token = localStorage.getItem('auth_token');
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
+    return this.http.delete<void>(`${this.API}/${id}`, { headers });
   }
 }

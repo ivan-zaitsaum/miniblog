@@ -8,4 +8,7 @@ import com.example.miniblog.model.Post;
 public interface PostService {
     List<PostDto> getAllPosts();
     Post createPost(CreatePostRequest request);
+
+    // Логика для удаления поста
+    void deletePost(Long postId);
 }

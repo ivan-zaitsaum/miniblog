@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+
 import java.util.List;
 
 @RestController
@@ -28,8 +29,13 @@ public class PostRestController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody CreatePostRequest request) {
-        // Присваиваем авторизацию пользователю перед созданием поста
         Post created = postService.createPost(request);
         return ResponseEntity.ok(created);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return ResponseEntity.noContent().build(); // Возвращаем статус 204, если пост удален
     }
 }

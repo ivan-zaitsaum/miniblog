@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
                         p.getId(),
                         p.getTitle(),
                         p.getContent(),
-                        p.getAuthorUsername(),  // Используем новый метод
+                        p.getAuthorUsername(),
                         p.getCreatedAt()
                 )).collect(Collectors.toList());
     }
@@ -46,5 +46,23 @@ public class PostServiceImpl implements PostService {
 
         post.setCreatedAt(java.time.LocalDateTime.now());
         return postRepository.save(post);
+    }
+
+    // Логика для удаления поста
+    @Override
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        // Получаем текущего авторизованного пользователя
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Проверяем, что текущий пользователь является автором поста
+        if (!post.getAuthor().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("You can only delete your own posts");
+        }
+
+        // Удаляем пост, если авторизованный пользователь — автор
+        postRepository.delete(post);
     }
 }

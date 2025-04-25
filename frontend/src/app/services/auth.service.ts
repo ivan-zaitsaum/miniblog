@@ -37,4 +37,13 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);  // Удаляем токен
   }
+
+  getUsername(): string | null {
+    const token = localStorage.getItem('auth_token');
+    if (!token) return null;
+
+    // Расшифровываем payload токена
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub || null;  // если имя пользователя хранится в sub
+  }
 }
