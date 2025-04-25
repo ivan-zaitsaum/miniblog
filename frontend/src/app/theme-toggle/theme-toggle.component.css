@@ -1,0 +1,17 @@
+/* src/app/theme-toggle/theme-toggle.component.css */
+button#theme-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--link-color);
+  color: var(--bg-color);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+button#theme-toggle:hover {
+  background: #005fa3;
+}

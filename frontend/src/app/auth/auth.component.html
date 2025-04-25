@@ -1,6 +1,11 @@
-<!-- src/app/auth/auth.component.html -->
-<div style="max-width: 400px; margin: auto">
-  <h2>{{ isLoginMode ? 'Login' : 'Register' }}</h2>
+<div class="nav">
+  <a href="/">Main</a> |
+  <a href="/registration">Registration</a>
+</div>
+
+<!-- Форма логина -->
+<div class="login-container">
+  <h1>{{ isLoginMode ? 'Login' : 'Register' }}</h1>
 
   <form (ngSubmit)="submit()" #authForm="ngForm">
     <input

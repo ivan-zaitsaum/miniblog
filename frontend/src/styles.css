@@ -1,1 +1,105 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg-color:      #f0f0f0;
+  --text-color:    #222;
+  --link-color:    #0066cc;
+  --card-bg:       #fff;
+  --card-border:   #ccc;
+  --text-muted:    #555;
+  --text-faint:    #888;
+}
+
+body.dark {
+  --bg-color:      #222;
+  --text-color:    #eee;
+  --link-color:    #4fa;
+  --card-bg:       #333;
+  --card-border:   #555;
+  --text-muted:    #ccc;
+  --text-faint:    #aaa;
+}
+
+body {
+  background-color: var(--bg-color);
+  color:            var(--text-color);
+  margin: 0;
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+}
+
+a {
+  color: var(--link-color);
+}
+
+button#theme-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--link-color);
+  color: var(--bg-color);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+button#theme-toggle:hover {
+  background: #005fa3;
+}
+
+.login-container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  margin: 50px auto;
+}
+
+.login-container h1 {
+  text-align: center;
+  color: var(--link-color);
+  margin-bottom: 20px;
+}
+
+.login-container label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--link-color);
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid var(--link-color);
+  border-radius: 5px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+.login-container input[type="submit"] {
+  width: 100%;
+  padding: 8px;
+  background-color: var(--link-color);
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  color: var(--bg-color);
+  cursor: pointer;
+}
+
+.login-container p {
+  text-align: center;
+}
+
+.nav {
+  margin-bottom: 20px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--link-color);
+  margin-right: 15px;
+}
