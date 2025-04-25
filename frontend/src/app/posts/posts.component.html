@@ -14,6 +14,10 @@
           (click)="deletePost(post.id!)">
     Delete
   </button>
+  <button *ngIf="authService.getUsername() === post.authorUsername && post.id !== undefined"
+          [routerLink]="['/edit-post', post.id]">
+    Edit
+  </button>
 
   <hr />
 </div>

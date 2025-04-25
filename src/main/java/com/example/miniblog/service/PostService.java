@@ -11,4 +11,6 @@ public interface PostService {
 
     // Логика для удаления поста
     void deletePost(Long postId);
+
+    boolean updatePost(Long id, CreatePostRequest request, String username);
 }

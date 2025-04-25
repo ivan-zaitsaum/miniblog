@@ -2,6 +2,7 @@ package com.example.miniblog.controller;
 
 import com.example.miniblog.dto.CreatePostRequest;
 import com.example.miniblog.dto.PostDto;
+import com.example.miniblog.model.User;
 import com.example.miniblog.service.PostService;
 import com.example.miniblog.model.Post;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,5 +38,20 @@ public class PostRestController {
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
         return ResponseEntity.noContent().build(); // Возвращаем статус 204, если пост удален
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePost(@PathVariable Long id,
+                                        @RequestBody CreatePostRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = user.getUsername(); // ← теперь всё корректно
+
+        boolean updated = postService.updatePost(id, request, username);
+
+        if (!updated) {
+            return ResponseEntity.status(403).body("You can edit only your own posts.");
+        }
+
+        return ResponseEntity.ok().build();
     }
 }

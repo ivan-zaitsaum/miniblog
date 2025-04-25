@@ -1,0 +1,11 @@
+<h2>Edit Post</h2>
+
+<form (ngSubmit)="updatePost()">
+  <label>Title:</label>
+  <input type="text" [(ngModel)]="postData.title" name="title" required />
+
+  <label>Content:</label>
+  <textarea [(ngModel)]="postData.content" name="content" required></textarea>
+
+  <button type="submit">Update</button>
+</form>

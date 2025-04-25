@@ -13,7 +13,7 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // 👈 добавляем!
     @JoinColumn(name = "user_id", nullable = false)
     private User author;
 

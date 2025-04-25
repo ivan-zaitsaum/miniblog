@@ -32,4 +32,15 @@ export class PostService {
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
     return this.http.delete<void>(`${this.API}/${id}`, { headers });
   }
+
+  updatePost(id: number, post: Post): Observable<void> {
+    const token = localStorage.getItem('auth_token');
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : new HttpHeaders();
+
+    return this.http.put<void>(`${this.API}/${id}`, post, { headers });
+  }
+
+
 }
