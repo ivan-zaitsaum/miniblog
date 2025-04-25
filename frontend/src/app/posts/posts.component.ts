@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';  // Импортируем FormsMo
 import { Post, PostService } from '../services/post.service';
 import { AuthService } from '../services/auth.service';
 import {RouterLink} from '@angular/router';
+import {CommentsComponent} from '../comments/comments.component';
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],  // Добавляем CommonModule и FormsModule
+  imports: [CommonModule, FormsModule, RouterLink, CommentsComponent],  // Добавляем CommonModule и FormsModule
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css']
 })

@@ -9,7 +9,7 @@
   <p>{{ post.content }}</p>
   <small>By {{ post.authorUsername }} on {{ post.createdAt | date: 'short' }}</small>
 
-  <!-- Кнопка удаления только для автора -->
+  <!-- Кнопки для автора -->
   <button *ngIf="authService.getUsername() === post.authorUsername && post.id !== undefined"
           (click)="deletePost(post.id!)">
     Delete
@@ -18,6 +18,9 @@
           [routerLink]="['/edit-post', post.id]">
     Edit
   </button>
+
+  <!-- ✨ ВСТАВКА КОММЕНТАРИЕВ -->
+  <app-comments [postId]="post.id!"></app-comments>
 
   <hr />
 </div>
