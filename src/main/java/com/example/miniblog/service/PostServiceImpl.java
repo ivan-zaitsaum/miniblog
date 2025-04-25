@@ -69,8 +69,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean updatePost(Long id, CreatePostRequest request, String username) {
         return postRepository.findById(id).map(post -> {
-            System.out.println("POST AUTHOR USERNAME: " + post.getAuthor().getUsername());
-            System.out.println("TOKEN USERNAME: " + username);
             if (!post.getAuthor().getUsername().equals(username)) {
                 return false; // не автор — нельзя редактировать
             }
@@ -79,8 +77,6 @@ public class PostServiceImpl implements PostService {
             post.setContent(request.getContent());
             postRepository.save(post);
             return true;
-
         }).orElse(false); // если пост не найден
-
     }
 }

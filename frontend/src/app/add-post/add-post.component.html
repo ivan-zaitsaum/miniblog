@@ -1,11 +1,42 @@
 <h2>Add a New Post</h2>
 
 <form (ngSubmit)="submitPost()">
-  <label for="title">Title:</label>
+  <label>Title:</label>
   <input type="text" [(ngModel)]="newPost.title" name="title" required />
 
-  <label for="content">Content:</label>
+  <label>Content:</label>
   <textarea [(ngModel)]="newPost.content" name="content" required></textarea>
 
-  <button type="submit">Submit Post</button>
+  <!-- Категории -->
+  <label>Categories:</label>
+  <div *ngFor="let category of categories">
+    <input type="checkbox"
+           [value]="category.id"
+           (change)="onCheckboxChange($event, selectedCategories)" />
+    {{ category.name }}
+  </div>
+
+  <!-- Добавить новую категорию -->
+  <div style="margin-top: 10px;">
+    <input [(ngModel)]="newCategoryName" name="newCategory" placeholder="New category..." />
+    <button type="button" (click)="createCategory()">Add Category</button>
+  </div>
+
+  <!-- Теги -->
+  <label>Tags:</label>
+  <div *ngFor="let tag of tags">
+    <input type="checkbox"
+           [value]="tag.id"
+           (change)="onCheckboxChange($event, selectedTags)" />
+    {{ tag.name }}
+  </div>
+
+  <!-- Добавить новый тег -->
+  <div style="margin-top: 10px;">
+    <input [(ngModel)]="newTagName" name="newTag" placeholder="New tag..." />
+    <button type="button" (click)="createTag()">Add Tag</button>
+  </div>
+
+
+  <button type="submit">Submit</button>
 </form>
