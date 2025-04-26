@@ -1,0 +1,134 @@
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Заголовок и контейнер формы */
+.form-container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  padding: 20px;
+  width: 400px; /* ✅ Сделать уже */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-title {
+  text-align: center;
+  color: var(--link-color);
+}
+
+label {
+  color: var(--link-color);
+  margin-bottom: 5px;
+  display: block;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--link-color);
+  border-radius: 5px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+fieldset {
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+legend {
+  padding: 0 10px;
+  font-weight: bold;
+  color: var(--link-color);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px; /* ✅ Чуть меньше отступы между чекбоксами */
+  font-size: 14px;
+}
+
+/* Блок для добавления новой категории / тега */
+.add-new {
+  display: flex;
+  margin-top: 10px;
+  gap: 8px;
+}
+
+.add-new input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--link-color);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+.add-new button {
+  width: 120px;
+  padding: 8px;
+  background: var(--link-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Кнопка отправки */
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--link-color);
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  color: var(--bg-color);
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: var(--button-bg);
+}
+
+/* Ссылка назад */
+.back-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-link a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.checkbox-block {
+  margin-bottom: 5px; /* маленький отступ между чекбоксами */
+}
+
+fieldset {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+}
+
+legend {
+  color: var(--link-color);
+  padding: 0 10px;
+  font-weight: bold;
+}

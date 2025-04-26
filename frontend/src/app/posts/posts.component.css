@@ -6,7 +6,7 @@
   --link-color: #00BFFF;
   --input-bg: #333333;
   --input-border: #555555;
-  --input-color: #ffffff;
+  --input-color: #cccccc;
 }
 
 /* Темы */
@@ -18,7 +18,7 @@ body.light {
   --link-color: #0066cc;
   --input-bg: #eeeeee;
   --input-border: #cccccc;
-  --input-color: #222222;
+  --input-color: #777777;
 }
 
 body.dark {
@@ -29,7 +29,7 @@ body.dark {
   --link-color: #00BFFF;
   --input-bg: #333333;
   --input-border: #555555;
-  --input-color: #ffffff;
+  --input-color: #cccccc;
 }
 
 /* Общие стили */
@@ -135,7 +135,7 @@ body {
   border: none;
 }
 
-/* Посты */
+/* --- Карточка поста --- */
 .container {
   margin-left: 20px;
   margin-right: 20px;
@@ -144,11 +144,15 @@ body {
 .post-card {
   background: var(--card-bg);
   border: 1px solid var(--input-border);
-  padding: 15px;
   border-radius: 10px;
+  padding: 20px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* ✅ одинаковые отступы между всеми элементами */
 }
 
+/* Заголовок поста */
 .post-title {
   color: var(--link-color);
   text-decoration: none;
@@ -159,27 +163,76 @@ body {
   text-decoration: underline;
 }
 
+/* Дата и автор */
 .post-meta {
   font-size: 12px;
+  color: var(--input-color);
+}
+
+/* Контент поста */
+.post-content {
   color: var(--text-color);
 }
 
-.post-content {
-  margin: 15px 0;
-}
-
-.badge {
+/* Категории и теги */
+.category-label, .tag-label {
   display: inline-block;
   padding: 2px 6px;
-  margin-right: 5px;
+  margin-right: 6px;
+  margin-top: 2px;
   border-radius: 4px;
-  background: var(--input-bg);
-  color: var(--text-color);
   font-size: 12px;
+  border: 1px solid #ccc;
 }
 
+.category-label {
+  background: #eef;
+  color: #000;
+}
+
+.tag-label {
+  background: #fee;
+  color: #000;
+}
+
+/* Блок с кнопками Edit/Delete */
+.post-actions {
+  font-size: 14px;
+}
+
+.action-link {
+  color: var(--link-color);
+  margin-right: 8px;
+  text-decoration: none;
+}
+
+.action-link:hover {
+  text-decoration: underline;
+}
+
+/* Комментарии */
 .comments-section {
-  margin-top: 15px;
   border-top: 1px solid var(--input-border);
   padding-top: 10px;
 }
+
+.comments-title {
+  color: var(--link-color);
+  margin-bottom: 5px;
+}
+.header-line {
+  border: none;
+  height: 1px;
+  background-color: var(--input-border);
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.post-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--input-border); /* ✅ светло-серый цвет */
+  margin: 20px 0;
+  opacity: 0.7; /* ✅ сделаем чуть прозрачнее для ещё мягче эффекта */
+}
+

@@ -1,42 +1,51 @@
-<h2>Add a New Post</h2>
+<div class="form-container">
+  <h2 class="form-title">Add a New Post</h2>
 
-<form (ngSubmit)="submitPost()">
-  <label>Title:</label>
-  <input type="text" [(ngModel)]="newPost.title" name="title" required />
+  <form (ngSubmit)="submitPost()">
+    <label for="title">Title:</label>
+    <input type="text" id="title" [(ngModel)]="newPost.title" name="title" required />
 
-  <label>Content:</label>
-  <textarea [(ngModel)]="newPost.content" name="content" required></textarea>
+    <label for="content">Content:</label>
+    <textarea id="content" [(ngModel)]="newPost.content" name="content" rows="5" required></textarea>
 
-  <!-- Категории -->
-  <label>Categories:</label>
-  <div *ngFor="let category of categories">
-    <input type="checkbox"
-           [value]="category.id"
-           (change)="onCheckboxChange($event, selectedCategories)" />
-    {{ category.name }}
+    <fieldset>
+      <legend>Categories</legend>
+      <div *ngFor="let category of categories" class="checkbox-block">
+        <label class="checkbox-label">
+          <input type="checkbox"
+                 [value]="category.id"
+                 (change)="onCheckboxChange($event, selectedCategories)" />
+          {{ category.name }}
+        </label>
+      </div>
+
+      <div class="add-new">
+        <input [(ngModel)]="newCategoryName" name="newCategory" placeholder="New category..." />
+        <button type="button" (click)="createCategory()">Add Category</button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Tags</legend>
+      <div *ngFor="let tag of tags" class="checkbox-block">
+        <label class="checkbox-label">
+          <input type="checkbox"
+                 [value]="tag.id"
+                 (change)="onCheckboxChange($event, selectedTags)" />
+          {{ tag.name }}
+        </label>
+      </div>
+
+      <div class="add-new">
+        <input [(ngModel)]="newTagName" name="newTag" placeholder="New tag..." />
+        <button type="button" (click)="createTag()">Add Tag</button>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="submit-button">Submit Post</button>
+  </form>
+
+  <div class="back-link">
+    <a routerLink="/">Back to Home Page</a>
   </div>
-
-  <!-- Добавить новую категорию -->
-  <div style="margin-top: 10px;">
-    <input [(ngModel)]="newCategoryName" name="newCategory" placeholder="New category..." />
-    <button type="button" (click)="createCategory()">Add Category</button>
-  </div>
-
-  <!-- Теги -->
-  <label>Tags:</label>
-  <div *ngFor="let tag of tags">
-    <input type="checkbox"
-           [value]="tag.id"
-           (change)="onCheckboxChange($event, selectedTags)" />
-    {{ tag.name }}
-  </div>
-
-  <!-- Добавить новый тег -->
-  <div style="margin-top: 10px;">
-    <input [(ngModel)]="newTagName" name="newTag" placeholder="New tag..." />
-    <button type="button" (click)="createTag()">Add Tag</button>
-  </div>
-
-
-  <button type="submit">Submit</button>
-</form>
+</div>

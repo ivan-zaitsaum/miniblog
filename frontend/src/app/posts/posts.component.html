@@ -16,9 +16,28 @@
     <button class="all-posts-button">All Posts</button>
   </div>
 
-  <div *ngFor="let post of posts" class="post-card">
-    <div class="post-header">
-      <a class="post-title" href="#">{{ post.title }}</a>
+  <div *ngFor="let post of posts; let last = last">
+    <div class="post-card">
+      <div class="post-header">
+        <a class="post-title" href="#">{{ post.title }}</a>
+      </div>
+
+      <div class="post-meta">
+        Created at: {{ post.createdAt | date: 'short' }} | Author: {{ post.authorUsername }}
+      </div>
+
+      <div class="post-content">{{ post.content }}</div>
+
+      <div *ngIf="post.categoryNames && post.categoryNames.length > 0">
+        <strong>Categories:</strong>
+        <span *ngFor="let category of post.categoryNames" class="category-label">{{ category }}</span>
+      </div>
+
+      <div *ngIf="post.tagNames && post.tagNames.length > 0">
+        <strong>Tags:</strong>
+        <span *ngFor="let tag of post.tagNames" class="tag-label">{{ tag }}</span>
+      </div>
+
       <div class="post-actions">
         <a *ngIf="authService.getUsername() === post.authorUsername"
            [routerLink]="['/edit-post', post.id]"
@@ -27,27 +46,14 @@
            (click)="deletePost(post.id!)"
            class="action-link">Delete</a>
       </div>
+
+      <div class="comments-section">
+        <h5 class="comments-title">Comments:</h5>
+        <app-comments [postId]="post.id!"></app-comments>
+      </div>
     </div>
 
-    <div class="post-meta">
-      Created at: {{ post.createdAt | date: 'short' }} | Author: {{ post.authorUsername }}
-    </div>
-
-    <div class="post-content">{{ post.content }}</div>
-
-    <div *ngIf="post.categoryNames?.length" class="categories">
-      <strong>Categories:</strong>
-      <span *ngFor="let cat of post.categoryNames" class="badge category">{{ cat }}</span>
-    </div>
-
-    <div *ngIf="post.tagNames?.length" class="tags">
-      <strong>Tags:</strong>
-      <span *ngFor="let tag of post.tagNames" class="badge tag">{{ tag }}</span>
-    </div>
-
-    <div class="comments-section">
-      <strong>Comments:</strong>
-      <app-comments [postId]="post.id!"></app-comments>
-    </div>
+    <!-- ✅ Линия теперь снаружи карточки -->
+    <hr *ngIf="!last" class="post-divider">
   </div>
 </div>

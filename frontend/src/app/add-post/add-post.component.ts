@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { Post, PostService } from '../services/post.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; // 👈 обязательно для *ngFor и *ngIf
@@ -15,7 +15,8 @@ import { Tag } from '../models/tag.model';
   styleUrls: ['./add-post.component.css'],
   imports: [
     CommonModule, // 👈 добавили сюда
-    FormsModule
+    FormsModule,
+    RouterLink
   ]
 })
 export class AddPostComponent implements OnInit {

@@ -1,5 +1,4 @@
 <div class="comments">
-  <h4>Comments:</h4>
 
   <div *ngIf="comments.length === 0" class="no-comments">
     No comments yet.
@@ -16,7 +15,9 @@
   </div>
 
   <div *ngIf="authService.isLoggedIn()" class="comment-form">
-    <textarea [(ngModel)]="newComment" rows="3" placeholder="Enter your comment..."></textarea>
-    <button (click)="submitComment()">Submit Comment</button>
+    <form (ngSubmit)="submitComment()">
+      <textarea [(ngModel)]="newComment" name="comment" rows="3" placeholder="Enter your comment..." required></textarea>
+      <button type="submit">Submit Comment</button>
+    </form>
   </div>
 </div>
