@@ -1,12 +1,18 @@
 <!-- app.component.html -->
+
 <app-theme-toggle></app-theme-toggle>
+
 <div class="nav-bar">
   <div class="nav-links">
     <a routerLink="/" class="nav-link">Home</a>
-    <a routerLink="/add-post" class="nav-link">Add Post</a>
-    <a routerLink="/profile" class="nav-link">Profile</a>
+    <a *ngIf="authService.isLoggedIn()" routerLink="/add-post" class="nav-link">Add Post</a>
+    <a *ngIf="authService.isLoggedIn()" routerLink="/profile" class="nav-link">Profile</a>
+
+    <a *ngIf="authService.isLoggedIn()" (click)="logout()" class="nav-link" style="cursor: pointer;">Logout</a>
+
+    <a *ngIf="!authService.isLoggedIn()" routerLink="/auth" class="nav-link">Login</a>
+    <a *ngIf="!authService.isLoggedIn()" routerLink="/registration" class="nav-link">Register</a>
   </div>
 </div>
 
 <router-outlet></router-outlet>
-

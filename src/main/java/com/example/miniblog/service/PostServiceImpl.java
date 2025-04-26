@@ -94,4 +94,43 @@ public class PostServiceImpl implements PostService {
             return true;
         }).orElse(false);
     }
+
+    @Override
+    public List<PostDto> getFilteredPosts(String query, Long categoryId, Long tagId) {
+        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(); // сначала получаем все посты (пока так)
+
+        return posts.stream()
+                .filter(post -> {
+                    boolean matches = true;
+
+                    // 🔍 Фильтр по ключевому слову
+                    if (query != null && !query.isEmpty()) {
+                        String lowerQuery = query.toLowerCase();
+                        matches &= post.getTitle().toLowerCase().contains(lowerQuery)
+                                || post.getContent().toLowerCase().contains(lowerQuery);
+                    }
+
+                    // 🔍 Фильтр по категории
+                    if (categoryId != null) {
+                        matches &= post.getCategories().stream().anyMatch(c -> c.getId().equals(categoryId));
+                    }
+
+                    // 🔍 Фильтр по тегу
+                    if (tagId != null) {
+                        matches &= post.getTags().stream().anyMatch(t -> t.getId().equals(tagId));
+                    }
+
+                    return matches;
+                })
+                .map(p -> new PostDto(
+                        p.getId(),
+                        p.getTitle(),
+                        p.getContent(),
+                        p.getAuthorUsername(),
+                        p.getCreatedAt(),
+                        p.getCategories().stream().map(Category::getName).collect(Collectors.toSet()),
+                        p.getTags().stream().map(Tag::getName).collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toList());
+    }
 }

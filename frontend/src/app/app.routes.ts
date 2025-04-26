@@ -4,9 +4,10 @@ import { PostsComponent } from './posts/posts.component';
 import { AddPostComponent } from './add-post/add-post.component';
 import { EditPostComponent } from './edit-post/edit-post.component';
 
+
 export const routes: Routes = [
-    { path: '', component: PostsComponent },
-    { path: 'auth', component: AuthComponent },
-    { path: 'add-post', component: AddPostComponent },
-    { path: 'edit-post/:id', component: EditPostComponent }
+  { path: '', component: PostsComponent },
+  { path: 'auth', component: AuthComponent },
+  { path: 'add-post', component: AddPostComponent },
+  { path: 'edit-post/:id', component: EditPostComponent },
 ];

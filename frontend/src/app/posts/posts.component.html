@@ -4,18 +4,25 @@
     <hr class="header-line">
   </div>
 
+  <!-- 🔥 Панель поиска и фильтрации -->
   <div class="search-bar">
-    <input type="text" placeholder="Search..." class="search-input">
-    <select class="dropdown">
-      <option>All Categories</option>
+    <input [(ngModel)]="searchQuery" type="text" placeholder="Search..." class="search-input">
+
+    <select [(ngModel)]="selectedCategoryId" class="dropdown">
+      <option [value]="null">All Categories</option>
+      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
     </select>
-    <select class="dropdown">
-      <option>All Tags</option>
+
+    <select [(ngModel)]="selectedTagId" class="dropdown">
+      <option [value]="null">All Tags</option>
+      <option *ngFor="let tag of tags" [value]="tag.id">{{ tag.name }}</option>
     </select>
-    <button class="filter-button">Filter</button>
-    <button class="all-posts-button">All Posts</button>
+
+    <button (click)="applyFilter()" class="filter-button">Filter</button>
+    <button (click)="resetFilter()" class="all-posts-button">All Posts</button>
   </div>
 
+  <!-- 🔥 Список постов -->
   <div *ngFor="let post of posts; let last = last">
     <div class="post-card">
       <div class="post-header">
@@ -53,7 +60,7 @@
       </div>
     </div>
 
-    <!-- ✅ Линия теперь снаружи карточки -->
+    <!-- Линия между постами -->
     <hr *ngIf="!last" class="post-divider">
   </div>
 </div>

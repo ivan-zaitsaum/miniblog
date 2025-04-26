@@ -35,7 +35,7 @@ export class AuthService {
 
   // Выход
   logout(): void {
-    localStorage.removeItem(this.tokenKey);  // Удаляем токен
+    localStorage.removeItem('auth_token');
   }
 
   getUsername(): string | null {
@@ -46,4 +46,6 @@ export class AuthService {
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.sub || null;  // если имя пользователя хранится в sub
   }
+
+
 }

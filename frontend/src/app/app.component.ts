@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ThemeToggleComponent} from './theme-toggle/theme-toggle.component';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
+import { RouterLink, RouterOutlet, Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; // ✅ Добавляем CommonModule
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +10,15 @@ import {RouterLink, RouterOutlet} from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   imports: [
+    CommonModule,         // ✅ ОБЯЗАТЕЛЬНО чтобы заработал *ngIf
     ThemeToggleComponent,
     RouterOutlet,
     RouterLink
   ]
 })
 export class AppComponent implements OnInit {
+
+  constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadTheme();
@@ -34,5 +39,10 @@ export class AppComponent implements OnInit {
     } else {
       document.body.classList.remove('light-theme');
     }
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

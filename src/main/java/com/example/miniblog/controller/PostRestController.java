@@ -23,9 +23,14 @@ public class PostRestController {
         this.postService = postService;
     }
 
+    // ✅ Новый правильный метод загрузки постов с фильтрацией
     @GetMapping
-    public List<PostDto> getAllPosts() {
-        return postService.getAllPosts();
+    public List<PostDto> getAllPosts(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long tagId
+    ) {
+        return postService.getFilteredPosts(q, categoryId, tagId);
     }
 
     @PostMapping
@@ -37,14 +42,14 @@ public class PostRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
-        return ResponseEntity.noContent().build(); // Возвращаем статус 204, если пост удален
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePost(@PathVariable Long id,
                                         @RequestBody CreatePostRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = user.getUsername(); // ← теперь всё корректно
+        String username = user.getUsername();
 
         boolean updated = postService.updatePost(id, request, username);
 
@@ -55,3 +60,4 @@ public class PostRestController {
         return ResponseEntity.ok().build();
     }
 }
+

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Post {
@@ -28,7 +28,6 @@ export class PostService {
     return this.http.post<Post>(this.API, post, { headers });
   }
 
-  // 🔥 Новый метод для удаления поста
   deletePost(id: number): Observable<void> {
     const token = localStorage.getItem('auth_token');
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : {};
@@ -40,9 +39,23 @@ export class PostService {
     const headers = token
       ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
       : new HttpHeaders();
-
     return this.http.put<void>(`${this.API}/${id}`, post, { headers });
   }
 
+  // 🔥 Новый метод для фильтрации постов
+  getFiltered(query: string, categoryId: number | null, tagId: number | null): Observable<Post[]> {
+    let params = new HttpParams();
 
+    if (query) {
+      params = params.set('q', query);
+    }
+    if (categoryId !== null) {
+      params = params.set('categoryId', categoryId.toString());
+    }
+    if (tagId !== null) {
+      params = params.set('tagId', tagId.toString());
+    }
+
+    return this.http.get<Post[]>(this.API, { params });
+  }
 }

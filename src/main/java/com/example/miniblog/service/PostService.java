@@ -13,4 +13,7 @@ public interface PostService {
     void deletePost(Long postId);
 
     boolean updatePost(Long id, CreatePostRequest request, String username);
+
+    List<PostDto> getFilteredPosts(String query, Long categoryId, Long tagId);
+
 }
