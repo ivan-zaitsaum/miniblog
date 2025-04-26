@@ -1,26 +1,53 @@
-<h2>MiniBlog</h2>
+<div class="container">
+  <div class="page-header">
+    <h1 class="title">Mini Blog</h1>
+    <hr class="header-line">
+  </div>
 
-<a routerLink="/add-post" *ngIf="authService.isLoggedIn()">Add Post</a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search..." class="search-input">
+    <select class="dropdown">
+      <option>All Categories</option>
+    </select>
+    <select class="dropdown">
+      <option>All Tags</option>
+    </select>
+    <button class="filter-button">Filter</button>
+    <button class="all-posts-button">All Posts</button>
+  </div>
 
-<hr />
+  <div *ngFor="let post of posts" class="post-card">
+    <div class="post-header">
+      <a class="post-title" href="#">{{ post.title }}</a>
+      <div class="post-actions">
+        <a *ngIf="authService.getUsername() === post.authorUsername"
+           [routerLink]="['/edit-post', post.id]"
+           class="action-link">Edit</a> |
+        <a *ngIf="authService.getUsername() === post.authorUsername"
+           (click)="deletePost(post.id!)"
+           class="action-link">Delete</a>
+      </div>
+    </div>
 
-<div *ngFor="let post of posts">
-  <h3>{{ post.title }}</h3>
-  <p>{{ post.content }}</p>
-  <small>By {{ post.authorUsername }} on {{ post.createdAt | date: 'short' }}</small>
+    <div class="post-meta">
+      Created at: {{ post.createdAt | date: 'short' }} | Author: {{ post.authorUsername }}
+    </div>
 
-  <!-- Кнопки для автора -->
-  <button *ngIf="authService.getUsername() === post.authorUsername && post.id !== undefined"
-          (click)="deletePost(post.id!)">
-    Delete
-  </button>
-  <button *ngIf="authService.getUsername() === post.authorUsername && post.id !== undefined"
-          [routerLink]="['/edit-post', post.id]">
-    Edit
-  </button>
+    <div class="post-content">{{ post.content }}</div>
 
-  <!-- ✨ ВСТАВКА КОММЕНТАРИЕВ -->
-  <app-comments [postId]="post.id!"></app-comments>
+    <div *ngIf="post.categoryNames?.length" class="categories">
+      <strong>Categories:</strong>
+      <span *ngFor="let cat of post.categoryNames" class="badge category">{{ cat }}</span>
+    </div>
 
-  <hr />
+    <div *ngIf="post.tagNames?.length" class="tags">
+      <strong>Tags:</strong>
+      <span *ngFor="let tag of post.tagNames" class="badge tag">{{ tag }}</span>
+    </div>
+
+    <div class="comments-section">
+      <strong>Comments:</strong>
+      <app-comments [postId]="post.id!"></app-comments>
+    </div>
+  </div>
 </div>

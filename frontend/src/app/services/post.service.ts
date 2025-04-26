@@ -8,6 +8,8 @@ export interface Post {
   content: string;
   createdAt?: string;
   authorUsername?: string;
+  categoryNames?: string[];
+  tagNames?: string[];
 }
 
 @Injectable({ providedIn: 'root' })
