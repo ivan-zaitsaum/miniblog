@@ -7,11 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { routes } from './app.routes';
+import { AuthInterceptor } from './auth.interceptor';  // 👈 Импортируешь сюда
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([])),
+    provideHttpClient(withInterceptors([AuthInterceptor])),
     provideAnimations(),
     importProvidersFrom(FormsModule, CommonModule)
   ]

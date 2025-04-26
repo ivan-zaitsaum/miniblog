@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         String method = request.getMethod();
 
-        // ✅ ПУБЛИЧНЫЕ маршруты — пропускаем:
+        // Публичные маршруты — без проверки токена
         if (
                 path.startsWith("/api/auth") ||
                         (method.equals("GET") && path.startsWith("/api/posts")) ||
@@ -58,8 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(token);
         } catch (Exception e) {
-            // логируем, но продолжаем фильтрацию
-            System.out.println("⚠️ Invalid token: " + e.getMessage());
+            System.out.println("⚠️ Ошибка разбора токена: " + e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
@@ -70,8 +69,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (userOpt.isPresent() && jwtService.isTokenValid(token, userOpt.get())) {
                 User user = userOpt.get();
 
+                // ✅ Оборачиваем User в MyUserDetails
+                MyUserDetails userDetails = new MyUserDetails(user);
+
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(user, null, null);
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)

@@ -133,4 +133,21 @@ public class PostServiceImpl implements PostService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PostDto> getPostsByUser(User user) {
+        return postRepository.findByAuthorIdOrderByCreatedAtDesc(user.getId())
+                .stream()
+                .map(post -> new PostDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getAuthorUsername(),
+                        post.getCreatedAt(),
+                        post.getCategories().stream().map(c -> c.getName()).collect(Collectors.toSet()),
+                        post.getTags().stream().map(t -> t.getName()).collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,0 +1,44 @@
+.profile-container {
+  margin: 20px;
+  font-family: 'Courier New', monospace;
+}
+
+.profile-card {
+  background-color: var(--card-bg);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid var(--input-border);
+}
+
+.profile-card h2 {
+  margin: 0;
+  color: var(--link-color);
+}
+
+.profile-card p {
+  margin: 5px 0;
+}
+
+.your-posts-title {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: var(--link-color);
+}
+
+.post-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--input-border);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+
+.post-card h4 {
+  margin-top: 0;
+  color: var(--link-color);
+}
+
+.post-card p {
+  margin: 10px 0;
+}
