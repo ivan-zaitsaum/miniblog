@@ -21,6 +21,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "avatar")
+    private String avatar; // ✅ Новое поле для аватара
+
     public User() {}
 
     public User(String username, String email, String password, Role role) {
@@ -31,6 +34,7 @@ public class User {
     }
 
     public Long getId() { return id; }
+
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
@@ -42,4 +46,7 @@ public class User {
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+
+    public String getAvatar() { return avatar; }  // ✅ геттер
+    public void setAvatar(String avatar) { this.avatar = avatar; }  // ✅ сеттер
 }

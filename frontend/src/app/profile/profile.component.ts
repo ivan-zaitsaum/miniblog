@@ -13,14 +13,11 @@ import { RouterLink } from '@angular/router';
 export class ProfileComponent implements OnInit {
   user: any = null;
   posts: any[] = [];
+  avatarUrl: string = 'assets/default-avatar.png'; // Стартуем с дефолта
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    // ✅ Добавляем сюда проверку токена
-    const token = localStorage.getItem('auth_token');
-    console.log('Текущий токен в ProfileComponent:', token);
-
     this.loadProfile();
     this.loadUserPosts();
   }
@@ -29,6 +26,9 @@ export class ProfileComponent implements OnInit {
     this.http.get<any>('http://localhost:8080/api/users/me').subscribe({
       next: (profile) => {
         this.user = profile;
+        if (this.user.avatar) {
+          this.avatarUrl = 'http://localhost:8080/uploads/' + this.user.avatar;
+        }
       },
       error: (err) => {
         console.error('Ошибка при загрузке профиля:', err);
@@ -43,6 +43,38 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Ошибка при загрузке постов пользователя:', err);
+      }
+    });
+  }
+
+  selectedFile: File | null = null;
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadAvatar(): void {
+    if (!this.selectedFile) {
+      alert('Please select a file first!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    const token = localStorage.getItem('auth_token');
+
+    this.http.post<any>('http://localhost:8080/api/users/avatar', formData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: (response) => {
+        console.log('Аватар загружен!', response);
+        this.loadProfile(); // Перезагружаем профиль чтобы обновить аватар
+      },
+      error: (err) => {
+        console.error('Ошибка при загрузке аватара:', err);
       }
     });
   }
