@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { Post, PostService } from '../services/post.service';
 import {FormsModule} from '@angular/forms';
 
@@ -7,7 +7,8 @@ import {FormsModule} from '@angular/forms';
   selector: 'app-edit-post',
   templateUrl: './edit-post.component.html',
   imports: [
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   styleUrls: ['./edit-post.component.css']
 })

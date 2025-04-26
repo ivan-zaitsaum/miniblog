@@ -1,0 +1,72 @@
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Контейнер формы */
+.form-container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  padding: 20px;
+  width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Заголовок формы */
+.form-title {
+  text-align: center;
+  color: var(--link-color);
+  font-size: 24px;
+}
+
+/* Метки */
+label {
+  color: var(--link-color);
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Поля ввода */
+input[type="text"], textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--link-color);
+  border-radius: 5px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+/* Кнопка отправки */
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  background: var(--link-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background: var(--button-bg);
+}
+
+/* Ссылка назад */
+.back-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-link a {
+  color: var(--link-color);
+  text-decoration: none;
+}
