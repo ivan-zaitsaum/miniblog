@@ -29,8 +29,13 @@ public class CommentRestController {
     @PostMapping
     public ResponseEntity<Void> addComment(@PathVariable Long postId,
                                            @RequestBody CreateCommentRequest request) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        commentService.addCommentToPost(postId, request, user.getUsername());
+        // вместо приведения principal к User:
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        commentService.addCommentToPost(postId, request, username);
         return ResponseEntity.ok().build();
     }
 }
