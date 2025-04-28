@@ -103,17 +103,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getFilteredPosts(String query, Long categoryId, Long tagId) {
-        // ваша существующая логика фильтрации
-        return postRepository.findAll().stream()
+    public List<PostDto> getFilteredPosts(String q, Long categoryId, Long tagId) {
+        return postRepository.findFiltered(q, categoryId, tagId)
+                .stream()
                 .map(p -> new PostDto(
                         p.getId(),
                         p.getTitle(),
                         p.getContent(),
                         p.getAuthorUsername(),
                         p.getCreatedAt(),
-                        p.getCategories().stream().map(Category::getName).collect(Collectors.toSet()),
-                        p.getTags().stream().map(Tag::getName).collect(Collectors.toSet())
+                        p.getCategories().stream()
+                                .map(Category::getName)
+                                .collect(Collectors.toSet()),
+                        p.getTags().stream()
+                                .map(Tag::getName)
+                                .collect(Collectors.toSet())
                 ))
                 .collect(Collectors.toList());
     }
