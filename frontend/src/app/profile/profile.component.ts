@@ -1,22 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule }  from '@angular/common';
-import { FormsModule }   from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router, RouterLink }      from '@angular/router';
-
+import { Component, OnInit }        from '@angular/core';
+import { CommonModule }             from '@angular/common';
+import { FormsModule }              from '@angular/forms';
+import { HttpClient, HttpHeaders }  from '@angular/common/http';
+import { Router, RouterLink }       from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './profile.component.html',
-  styleUrls:   ['./profile.component.css'],
-  imports: [CommonModule, RouterLink, FormsModule]
+  styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: any = null;
+  user: any = {};
   posts: any[] = [];
-  avatarUrl: string = 'assets/default-avatar.png';
+  avatarUrl = 'assets/default-avatar.png';
   selectedFile: File | null = null;
+
+  // для inline-редактирования username
+  isEditingUsername = false;
+  newUsername = '';
 
   constructor(
     private http: HttpClient,
@@ -28,60 +31,105 @@ export class ProfileComponent implements OnInit {
     this.loadUserPosts();
   }
 
+  private getAuthHeaders(json = false): HttpHeaders {
+    let h = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${localStorage.getItem('auth_token') || ''}`
+    );
+    if (json) h = h.set('Content-Type', 'application/json');
+    return h;
+  }
+
   loadProfile(): void {
-    this.http.get<any>('http://localhost:8080/api/users/me').subscribe({
-      next: profile => {
-        this.user = profile;
-        if (this.user.avatar) {
-          this.avatarUrl = 'http://localhost:8080/uploads/' + this.user.avatar;
-        }
-      },
-      error: err => console.error('Ошибка при загрузке профиля:', err)
-    });
+    this.http
+      .get<any>('http://localhost:8080/api/users/me', { headers: this.getAuthHeaders() })
+      .subscribe({
+        next: p => {
+          this.user = p;
+          this.avatarUrl = p.avatar
+            ? `http://localhost:8080/uploads/${p.avatar}`
+            : 'assets/default-avatar.png';
+        },
+        error: e => this.handleAuthError(e)
+      });
   }
 
   loadUserPosts(): void {
-    this.http.get<any[]>('http://localhost:8080/api/users/posts').subscribe({
-      next: posts => this.posts = posts,
-      error: err   => console.error('Ошибка при загрузке постов пользователя:', err)
-    });
+    this.http
+      .get<any[]>('http://localhost:8080/api/users/posts', { headers: this.getAuthHeaders() })
+      .subscribe({
+        next: posts => (this.posts = posts),
+        error: e => this.handleAuthError(e)
+      });
   }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] || null;
+  onFileSelected(e: any): void {
+    this.selectedFile = e.target.files[0] || null;
   }
 
   uploadAvatar(): void {
-    if (!this.selectedFile) {
-      alert('Please select a file first!');
-      return;
-    }
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-    const token = localStorage.getItem('auth_token') || '';
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    this.http.post<any>('http://localhost:8080/api/users/avatar', formData, { headers })
+    if (!this.selectedFile) return alert('Please select a file first!');
+    const fd = new FormData();
+    fd.append('file', this.selectedFile);
+    this.http
+      .post<any>('http://localhost:8080/api/users/avatar', fd, { headers: this.getAuthHeaders() })
       .subscribe({
-        next: ()       => this.loadProfile(),
-        error: err     => console.error('Ошибка при загрузке аватара:', err)
+        next: () => {
+          this.selectedFile = null;
+          this.loadProfile();
+        },
+        error: e => console.error(e)
       });
   }
 
-  // ——————— Добавляем два метода:
+  startEdit(): void {
+    this.newUsername = this.user.username;
+    this.isEditingUsername = true;
+  }
+
+  saveUsername(): void {
+    if (!this.newUsername.trim()) return;
+    this.http
+      .put<any>(
+        'http://localhost:8080/api/users/me',
+        { username: this.newUsername },
+        { headers: this.getAuthHeaders(true) }
+      )
+      .subscribe({
+        next: () => {
+          // выкидываем на /auth
+          localStorage.removeItem('auth_token');
+          alert('Имя изменено, войдите под новым именем');
+          this.router.navigate(['/auth']);
+        },
+        error: e => {
+          if (e.status === 409) alert('Имя занято');
+          else this.handleAuthError(e);
+        }
+      });
+  }
+
+  cancelEdit(): void {
+    this.isEditingUsername = false;
+  }
 
   deletePost(id: number): void {
-    if (!confirm('Are you sure you want to delete this post?')) return;
-    const token = localStorage.getItem('auth_token') || '';
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    this.http.delete(`http://localhost:8080/api/posts/${id}`, { headers })
-      .subscribe({
-        next: ()       => this.loadUserPosts(),
-        error: err     => console.error('Ошибка при удалении поста:', err)
-      });
+    if (!confirm('Delete this post?')) return;
+    this.http
+      .delete<void>(`http://localhost:8080/api/posts/${id}`, { headers: this.getAuthHeaders() })
+      .subscribe(() => this.loadUserPosts());
   }
 
   editPost(id: number): void {
-    // Перенаправляем на страницу редактирования точно так же, как в PostsComponent
     this.router.navigate(['/edit-post', id]);
+  }
+
+  private handleAuthError(err: any) {
+    if (err.status === 401 || err.status === 403) {
+      localStorage.removeItem('auth_token');
+      this.router.navigate(['/auth']);
+    } else {
+      console.error(err);
+    }
   }
 }

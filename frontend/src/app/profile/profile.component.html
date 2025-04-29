@@ -1,31 +1,44 @@
 <h1>Your Profile</h1>
 <hr>
 
-<!-- Аватарная карточка -->
 <div class="card">
   <h1>Avatar</h1>
-  <!-- Здесь avatarUrl — ваш путь к картинке -->
-  <img [src]="avatarUrl"
-       alt="Avatar"
-       class="avatar-img">
+  <img [src]="avatarUrl" alt="Avatar" class="avatar-img"/>
 
   <form (ngSubmit)="uploadAvatar()" enctype="multipart/form-data">
-    <label style="color: var(--link-color);">Upload new avatar:</label><br>
-    <input type="file"
-           (change)="onFileSelected($event)"
-           accept="image/*"
-           required><br><br>
-    <button type="submit">Save Avatar</button>
-    <div class="profile-info">
-      <p><strong>Username:</strong> {{ user.username }}</p>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-    </div>
+    <label>Upload new avatar:</label><br/>
+    <input type="file" (change)="onFileSelected($event)" accept="image/*" required/><br/><br/>
+    <button class="btn btn-green" type="submit">Save Avatar</button>
   </form>
+
+  <div class="profile-info">
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <div class="username-row">
+      <strong>Username:</strong>
+      <!-- режим просмотра -->
+      <ng-container *ngIf="!isEditingUsername">
+        <span class="username-text">{{ user.username }}</span>
+        <button class="btn btn-green btn-change" (click)="startEdit()">Change</button>
+      </ng-container>
+
+      <!-- режим редактирования -->
+      <ng-container *ngIf="isEditingUsername">
+        <input
+          class="username-input"
+          [(ngModel)]="newUsername"
+          name="newUsername"
+          required
+        />
+        <button class="btn btn-green" (click)="saveUsername()">Save</button>
+        <button class="btn" (click)="cancelEdit()">Cancel</button>
+      </ng-container>
+    </div>
+  </div>
 </div>
 
-
 <h2>Your Posts</h2>
-<hr>
+<hr />
 
 <ng-container *ngIf="posts.length; else noPosts">
   <div *ngFor="let post of posts" class="post">
@@ -33,7 +46,7 @@
       <a (click)="editPost(post.id)">{{ post.title }}</a>
     </h2>
     <p class="date">
-      Created at: {{ post.createdAt | date:'short' }}
+      Created at: {{ post.createdAt | date: 'short' }}
     </p>
     <p>{{ post.content }}</p>
 
@@ -59,7 +72,8 @@
 </ng-container>
 
 <ng-template #noPosts>
-  <p>You have no posts yet.
+  <p>
+    You have no posts yet.
     <a routerLink="/add-post" style="color: var(--link-color)">
       Create one now
     </a>.

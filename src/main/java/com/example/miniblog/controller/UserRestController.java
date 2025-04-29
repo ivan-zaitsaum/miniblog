@@ -4,6 +4,7 @@ import com.example.miniblog.dto.PostDto;
 import com.example.miniblog.model.User;
 import com.example.miniblog.repository.UserRepository;
 import com.example.miniblog.service.PostService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +31,13 @@ public class UserRestController {
     public UserRestController(UserRepository userRepository, PostService postService) {
         this.userRepository = userRepository;
         this.postService = postService;
+    }
+
+    private User getCurrentUser() {
+        String currentUsername = SecurityContextHolder.getContext()
+                .getAuthentication().getName();
+        return userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     // ✅ Профиль пользователя
@@ -89,4 +99,21 @@ public class UserRestController {
         }
     }
 
+    @PutMapping("/me")
+    public User updateProfile(@RequestBody Map<String, String> updates) {
+        User user = getCurrentUser();
+        String newUsername = updates.get("username");
+        if (newUsername == null || newUsername.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Username must not be empty");
+        }
+        // Проверка на уникальность
+        if (userRepository.existsByUsername(newUsername)
+                && !newUsername.equals(user.getUsername())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "Username already in use");
+        }
+        user.setUsername(newUsername);
+        return userRepository.save(user);
+    }
 }
